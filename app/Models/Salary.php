@@ -12,19 +12,14 @@ class Salary extends Model
 
     protected $fillable = [
         'rate',
-        'user_id'
+        'user_id',
+        'per_hour'
     ];
 
 
     public function user() {
 
         return $this->belongsTo(User::class);
-
-    }
-
-    public function payroll () {
-
-        return $this->hasOne(Payroll::class);
 
     }
 }

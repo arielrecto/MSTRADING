@@ -34,7 +34,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
 
-        dump($request);
+    
 
          $request->validate([
              'name' => ['required', 'string', 'max:255'],
@@ -45,11 +45,15 @@ class RegisteredUserController extends Controller
          $user = User::create([
               'name' => $request->name,
               'email' => $request->email,
-              'password' => Hash::make($request->password),
-            'is_admin' => $request->role === 'true' ? true : false
+              'password' => Hash::make($request->password)
          ]);
 
-         event(new Registered($user));
+
+         $user->update([
+            'is_admin' => ($user->where('is_admin', true)->count() === 0) ? true : false,  
+         ]);
+
+         event(new Registered($user));  
 
          Auth::login($user);
 

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Models\User;
 
-class AdminController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,10 +15,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $employees = User::all()->where('is_admin', false);
-
-
-        return view('dashboard', compact('employees'));
+        $categories = Category::all();
+        return view('components.admin.category.index', compact(['categories']));
     }
 
     /**
@@ -26,8 +25,8 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        //
+    {  
+        return view('components.admin.category.create');
     }
 
     /**
@@ -38,7 +37,17 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+         $data = $request->validate([
+             'name' => 'required',
+           'category_code' => 'required'
+        ]);
+
+
+       Category::create($data);
+
+
+       return redirect()->route('admin.category.index')->with(['message' => 'Category Successfully Added']);
     }
 
     /**

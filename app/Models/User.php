@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,8 @@ class User extends Authenticatable
             'name',
             'email',
             'password',
-            'is_admin'
+            'is_admin',
+            'position_id',
     ];
 
     /**
@@ -50,6 +52,12 @@ class User extends Authenticatable
 
     }
 
+    public function position () {
+
+        return $this->belongsTo(Position::class);
+
+    }
+
     public function profile() {
 
         return $this->hasOne(Profile::class);
@@ -66,6 +74,30 @@ class User extends Authenticatable
     public function salary() {
 
         return $this->hasOne(Salary::class);
+
+    }
+
+    public function products() {
+        
+        return $this->hasMany(Product::class);
+
+    }
+    
+    public function payroll() {
+
+        return $this->hasOne(Payroll::class);
+
+    }
+
+    public function deductionSalary() {
+
+        return $this->belongsToMany(DeductionSalary::class);
+
+    }
+
+    public function image() {
+
+        return $this->hasOne(Image::class);
 
     }
 }

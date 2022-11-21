@@ -14,7 +14,16 @@ class Profile extends Model
         'middle_name',
         'last_name',
         'age',
-        'birth_date'
+        'gender',
+        'birth_date',
+        'marital_status',
+        'religion',
+        'citizenship',
+        'address',
+        'phil_health',
+        'pag_ibig',
+        'tin_no',
+        'cell_no'
     ];
 
 

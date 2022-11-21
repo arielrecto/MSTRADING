@@ -17,6 +17,7 @@ class CreateSalariesTable extends Migration
         Schema::create('salaries', function (Blueprint $table) {
             $table->id();
             $table->string('rate');
+            $table->string('per_hour');
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

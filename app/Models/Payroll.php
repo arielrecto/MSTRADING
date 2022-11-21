@@ -10,21 +10,31 @@ class Payroll extends Model
     use HasFactory;
 
     protected $fillable =[
-        'total', 
-        'salary_id',
-        'attendance_id'
+        'total_days',
+        'salary_rate',
+        'position',
+        'double_pay',
+        'user_id',
+        'hours_work',
+        'overtime_hours',
+        'overtime_salary',
+        'hours_work',          
+        'total',
+        'log_date', 
+        'is_approved',
+        'is_viewed',
+        'at_viewed'
     ];
 
 
-    public function salary() {
+    public function user() {
 
-        return $this->belongsTo(Salary::class);
+        return $this->belongsTo(User::class);
 
     }
+    public function deductions (){
 
-    public function attendances () {
-
-        return $this->belongsToMany(Attendance::class);
+        $this->hasMany(DeductionSalary::class);
 
     }
 }

@@ -20,7 +20,16 @@ class CreateProfilesTable extends Migration
             $table->string('middle_name');
             $table->string('last_name');
             $table->string('age');
-            $table->boolean('birth_date')->default(false);
+            $table->string('gender');
+            $table->string('marital_status');
+            $table->string('religion');
+            $table->string('citizenship');
+            $table->string('address');
+            $table->string('phil_health')->nullable();
+            $table->string('pag_ibig')->nullable();
+            $table->string('tin_no')->nullable();
+            $table->string('cell_no')->nullable();
+            $table->date('birth_date');
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });
