@@ -84,6 +84,11 @@
                                     </tr>
 
                                     <tr>
+                                        <td>Double Pay</td>
+                                        <td>{{$payroll->double_pay ?? 'N/A'}}</td>
+                                    </tr>
+
+                                    <tr>
 
                                     @foreach ($payroll->user->deductionSalary()->get() as $deduction)
                                         <tr>

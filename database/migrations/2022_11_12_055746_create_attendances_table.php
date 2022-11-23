@@ -21,7 +21,7 @@ class CreateAttendancesTable extends Migration
             $table->string('time_out')->nullable();
             $table->date('log_date');
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(DoublePay::class)->nullable();
+            $table->string('double_pay')->nullable();
             $table->boolean('is_approved')->default(false);
             $table->string('day_hours')->nullable();
             $table->string('over_time')->nullable();

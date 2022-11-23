@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AbsentController;
 use App\Http\Controllers\Admin\AdminRecordController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -110,6 +111,8 @@ Route::middleware(['auth'])->group(function () {
             Route::group(['prefix' => 'doublepay', 'as' => 'doublepay.'], function () {
                 Route::post('/store', [DoublePayController::class, 'store'])->name('store');
                 Route::get('/index', [DoublePayController::class, 'index'])->name('index');
+                Route::post('/inactive/id={id}', [DoublePayController::class, 'inactive'])->name('inactive');
+                Route::post('/delete/id={id}', [DoublePayController::class, 'destroy'])->name('delete');
             });
 
             //attendance
@@ -118,7 +121,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/approvedAttendance/id={id}', [AttendanceController::class, 'approvedAttendance'])->name('approvedAttendance');
             });
 
-            //PDF
+            
             //deduction salary
             Route::group(['prefix' => 'deduction', 'as' => 'deduction.'], function () {
                 Route::get('/index', [DeductionController::class, 'index'])->name('index');
@@ -128,6 +131,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/update/payroll/id={id}', [DeductionController::class, 'updatePayroll'])->name('updatePayroll');
             });
 
+            //PDF
             Route::group(['prefix' => 'generatePDF', 'as' => 'generatePDF.'],  function () {
                 Route::get('/view/id={id}', [PDFController::class, 'show'])->name('view');
                 Route::get('/getPDF', [PDFController::class, 'generate'])->name('generate');
@@ -154,12 +158,30 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/update', [CategoryController::class, 'update'])->name('update');
                 Route::post('delete', [CategoryController::class, 'destroy'])->name('dlelete');
             });
+
+            //absent
+            Route::group(['prefix' => 'absent', 'as' => 'absent.'], function () {
+                Route::get('/index', [AbsentController::class, 'index'])->name('index');
+                Route::post('/is_approve/id={id}', [AbsentController::class, 'approve'])->name('approve');
+                Route::get('/users/onleave',[AbsentController::class, 'usersOnLeave'])->name('usersOnLeave');
+                Route::post('/user/update/active/id={id}', [AbsentController::class, 'userActive'])->name('userActive');
+            });
         });
     });
 
 
     //Employee -- Routes
     Route::prefix('/dashboard')->as('dashboard.')->group(function () {
+
+
+         //absent 
+
+         Route::group(['prefix' => 'absent', 'as' => 'absent.'], function() {
+
+            Route::get('/create', [AbsentController::class, 'create'])->name('create');
+            Route::post('/store', [AbsentController::class, 'store'])->name('store');
+
+        });
 
         Route::get('/index', [RecordController::class, 'index'])->name('index');
 

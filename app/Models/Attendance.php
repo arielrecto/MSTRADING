@@ -17,6 +17,7 @@ class Attendance extends Model
     'is_approved',
     'day_hours',
     'over_time',
+    'double_pay'
     ];
 
     public function user() {

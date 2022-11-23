@@ -15,7 +15,7 @@
 
     
 
-                            @if($employee->image->count() == 0)
+                            @if($employee->image()->count() === 0)
                             <img class="h-auto w-full mx-auto"
                                 src="https://xsgames.co/randomusers/avatar.php?g=male" alt="">
 

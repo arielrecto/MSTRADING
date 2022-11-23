@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
+use App\Models\DoublePay;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\Stock;
@@ -84,6 +85,12 @@ class RecordController extends Controller
 
         $user = Auth::user();
 
+
+        if ($user->position()->count() === 0) {
+
+            return back()->with(['message' => 'Ask Admin for Position']);
+        }
+
         if ($user->attendances()->latest()->count() === 0) {
 
 
@@ -151,8 +158,19 @@ class RecordController extends Controller
                     $overTime = ($totalHoursWork - $user->position->hours_work);
 
 
+                    $doublePay = DoublePay::where('is_active', '=', '1')->get()->first();
 
 
+
+                    if ($doublePay !== null) {
+                        if ($doublePay->is_active === '1') {
+
+
+                            $user->attendances()->latest()->first()->update([
+                                'double_pay' => 1
+                            ]);
+                        }
+                    }
 
 
                     $user->attendances()->latest()->first()->update([
@@ -172,7 +190,7 @@ class RecordController extends Controller
                     'time_in' => Carbon::now()->setTimezone('Asia/Manila')->toTimeString(),
                     'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
                 ]);
-                return redirect()->back()->with(['message' => 'Time in Sucess']);
+                // return redirect()->back()->with(['message' => 'Time in Sucess']);
             }
         };
     }
@@ -224,9 +242,14 @@ class RecordController extends Controller
     public function salaryView()
     {
 
-        $payroll = auth::user()->payroll->latest()->first();
+        $payroll = auth::user()->payroll();
 
-        $payroll->update([
+        if ($payroll->count() === 0) {
+
+            return back()->with(['message' => 'No Payroll yet!']);
+        }
+
+        $payroll->latest()->first()->update([
             'is_viewed' => true,
             'date_viewed' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
         ]);

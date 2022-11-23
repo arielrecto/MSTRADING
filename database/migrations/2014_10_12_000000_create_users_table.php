@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('is_admin')->default(false);
             $table->foreignIdFor(Position::class)->nullable();
+            $table->boolean('on_leave')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

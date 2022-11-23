@@ -46,19 +46,33 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Status</th>
+                            <th>edit status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($doublePays as $doublePay)
                             <tr>
-                                <th>{{$doublePay->name}}</th>
-                                <th>{{$doublePay->type}}</th>
-                                <td>{{$doublePay->rate}}</td>
-                                <td>{{$carbon::parse($doublePay->date_start)->format('F d Y')}}</td>
-                                <td>{{$carbon::parse($doublePay->end_date)->format('F d Y')}}</td>
-                                <td>{{($doublePay->is_active) ? 'Active' : 'End'}}</td>
+                                <th>{{ $doublePay->name }}</th>
+                                <th>{{ $doublePay->type }}</th>
+                                <td>{{ $doublePay->rate }}</td>
+                                <td>{{ $carbon::parse($doublePay->date_start)->format('F d Y') }}</td>
+                                <td>{{ $carbon::parse($doublePay->end_date)->format('F d Y') }}</td>
+                                <td>{{ $doublePay->is_active ? 'Active' : 'End' }}</td>
+                                <td>
+                                    <div class="flex space-x-5">
+                                        <form action="{{ route('admin.doublepay.inactive', ['id' => $doublePay->id]) }}"
+                                            method="post">
+                                            @csrf
+                                            <button class="btn btn-warning">End</button>
+                                        </form>
+                                        <form action="{{route('admin.doublepay.delete', ['id' => $doublePay->id])}}" method="post">
+                                            @csrf
+                                            <button class="btn btn-error">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
-                        @empty 
+                        @empty
 
                             <div class="alert alert-warning shadow-lg">
                                 <div>
@@ -70,7 +84,7 @@
                                     <span>No Data</span>
                                 </div>
                             </div>
-                         @endforelse    
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -90,16 +104,16 @@
                     class="input input-bordered input-info w-full" />
                 <input type="text" placeholder="rate" name="rate"
                     class="input input-bordered input-info w-full " />
-                    <select name="type" class="select select-accent w-full">
-                        <option disabled selected>Select Type</option>
-                        <option>Holiday</option>
-                        {{-- <option>Dark mode</option>
+                <select name="type" class="select select-accent w-full">
+                    <option disabled selected>Select Type</option>
+                    <option>Holiday</option>
+                    {{-- <option>Dark mode</option>
                         <option>Light mode</option> --}}
-                      </select>
-                    <label for="date_start" class="label ">Start Date</label>
+                </select>
+                <label for="date_start" class="label ">Start Date</label>
                 <input type="date" placeholder="Start Date" name="date_start"
                     class="input input-bordered input-info w-full " />
-                    <label for="date_end">End Date</label>
+                <label for="date_end">End Date</label>
                 <input type="date" placeholder="Date End" name="date_end"
                     class="input input-bordered input-info w-full " />
                 <button class="btn btn-success">Add</button>

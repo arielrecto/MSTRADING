@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DoublePay;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use PhpParser\Node\Expr\Cast\Double;
 
 class DoublePayController extends Controller
 {
@@ -38,6 +38,28 @@ class DoublePayController extends Controller
         $doublePays = DoublePay::all();
 
         return view('components.admin.doublepay.index', compact(['doublePays']));
+
+    }
+    public function inActive($id) {
+
+        $double = DoublePay::find($id);
+
+
+        $double->update([
+            'is_active' => false
+        ]);
+
+        return back()->with(['message' => 'Double Pay Status is change to inactive is successfully']);
+
+    }
+    public function destroy($id) {
+
+
+        DoublePay::find($id)->delete();
+
+
+
+        return back()->with(['message' => 'Double Pay Successfully Deleted']);
 
     }
 }

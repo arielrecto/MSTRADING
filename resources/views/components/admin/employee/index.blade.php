@@ -17,11 +17,10 @@
                 <div class="text-center px-3 pb-6 pt-2">
                     <h3 class="text-white text-sm bold font-sans">{{$employee->name}}</h3>
 
-                    @if($employee->where('is_admin', '=' , 'true'))
-                    <p class="mt-2 font-sans font-light text-white">Position: Admin</p>
-
+                    @if($employee->is_admin === '1')
+                       <p class="mt-2 font-sans font-light text-white">Position: Admin</p>
                     @else 
-                    <p class="mt-2 font-sans font-light text-white">Position: {{$employee->position->name ?? 'N/A'}}</p>
+                         <p class="mt-2 font-sans font-light text-white">Position: {{$employee->position->name ?? 'N/A'}}</p>
                     @endif
                 </div>
                 <div class="flex justify-center pb-3 text-white">

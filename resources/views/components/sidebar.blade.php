@@ -40,14 +40,14 @@
                
             </x-sidebar-link>
           </li>
-          {{-- <li>
+          <li>
             <x-sidebar-link :href="route('admin.doublepay.index')" :active="request()->routeIs(['admin.doublepay.index'])">
 
                <i class="ri-calendar-event-fill text-2xl mr-2"></i>
                {{ __('Double Pay') }}
                
             </x-sidebar-link>
-          </li> --}}
+          </li> 
           <li>
             <x-sidebar-link :href="route('admin.attendance.index')" :active="request()->routeIs(['admin.attendance.index'])">
 
@@ -61,6 +61,14 @@
 
                <i class="ri-exchange-dollar-line text-2xl mr-2"></i>
                {{ __('Salary Deduction') }}
+               
+            </x-sidebar-link>
+          </li>
+          <li>
+            <x-sidebar-link :href="route('admin.absent.index')" :active="request()->routeIs(['admin.absent.index'])">
+
+               <i class="ri-exchange-dollar-line text-2xl mr-2"></i>
+               {{ __('Request Leave') }}
                
             </x-sidebar-link>
           </li>

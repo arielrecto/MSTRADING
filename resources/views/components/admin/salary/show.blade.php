@@ -20,7 +20,7 @@
                     <div class="p-4 sm:w-1/4 ">
                         <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">
                             {{ $positions->where('name', '=', $position->name)->count() ?? '' }}</h2>
-                        <p class="leading-relaxed">{{$position->name}}</p>
+                        <p class="leading-relaxed">{{ $position->name }}</p>
                     </div>
                 @endforeach
 
@@ -88,6 +88,7 @@
                             <th>id</th>
                             <th>Name</th>
                             <th>position</th>
+                            <th>Status</th>
                             <th>Last Payroll</th>
                             <th>Action</th>
 
@@ -108,6 +109,9 @@
                                     @endforeach
                                 </td>
                                 <td>
+                                    {{ $employee->on_leave === '1' ? 'On Leave' : 'Active' }}
+                                </td>
+                                <td>
 
                                     {{ $employee->payroll['log_date'] ?? 'N/A' }}
 
@@ -115,12 +119,14 @@
                                 <td>
 
                                     <div class="flex space-x-5">
+                                        @if($employee->on_leave !== '1')
                                         <form class="p-3"
                                             action="{{ route('admin.payroll.store', ['id' => $employee->id]) }}"
                                             method="post">
                                             @csrf
                                             <button>Generate Payroll</button>
                                         </form>
+                                        @endif
                                         @if ($employee->payroll()->count() > 0)
                                             <a href="{{ route('admin.payroll.show', ['id' => $employee->id]) }}">
                                                 <button class="btn btn-success"> view </button>

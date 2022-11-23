@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Attendance;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,9 @@ class CreateAbsentsTable extends Migration
         Schema::create('absents', function (Blueprint $table) {
             $table->id();
             $table->string('reason');
-            $table->foreignIdFor(Attendance::class);
+            $table->foreignIdFor(User::class);
+            $table->string('log_date');
+            $table->boolean('is_approve')->default(false);
             $table->timestamps();
         });
     }

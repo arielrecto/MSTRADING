@@ -24,6 +24,7 @@ class User extends Authenticatable
             'password',
             'is_admin',
             'position_id',
+            'on_leave'
     ];
 
     /**
@@ -98,6 +99,11 @@ class User extends Authenticatable
     public function image() {
 
         return $this->hasOne(Image::class);
+
+    }
+    public function absences() {
+
+        return $this->hasMany(Absents::class);
 
     }
 }

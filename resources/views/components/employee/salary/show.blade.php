@@ -1,3 +1,10 @@
+@php
+
+$payroll = $payroll->latest()->first();
+
+@endphp
+
+
 <x-app-layout>
 
     <div class="min-h-screen flex items-center justify-center">
@@ -67,20 +74,7 @@
 
                             <tr>
 
-                                @if ($payroll->overtime_salary == 0)
-                                    <td>
-                                        <form
-                                            action="{{ route('admin.payroll.overtime', ['id' => $payroll->user->id]) }}"
-                                            method="POST">
-                                            @csrf
-                                            <input type="hidden" name="overtime" value="true">
-                                            <button class="btn">With Overtime</button>
-                                        </form>
-                                    </td>
-                                @else
-                                    <td>Over Time</td>
-                                    <td>{{ $payroll->overtime_hours }}</td>
-                                @endif
+                               
                             </tr>
                             <tr>
                                 <td>Over Time Salary</td>

@@ -12,13 +12,21 @@ class Absents extends Model
 
     protected $fillable = [
         'reason',
-        'attendance_id'
+        'user_id',
+        'log_date',
+        'is_approve'
     ];
 
 
     public function attendances() {
 
         return $this->belongsToMany(Attendance::class);
+
+    }
+
+    public function user(){
+
+        return $this->belongsTo(User::class);
 
     }
 

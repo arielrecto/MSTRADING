@@ -95,6 +95,7 @@
                             </a>
                         @else
                             @if (Auth::user()->attendances()->latest()->first() !== null)
+
                                 @if (Auth::user()->attendances()->latest()->first()->log_date !==
                                     $carbon
                                         ::now()->setTimezone('Asia/Manila')->toDateString() ||
@@ -112,22 +113,24 @@
 
                                 @endif
                             @else
-                                <form action="{{ route('dashboard.attendance') }}" method="POST">
+                                @if (Auth::user()->position()->count() === 0)
+                                @else
+                                    <form action="{{ route('dashboard.attendance') }}" method="POST">
 
-                                    @csrf
+                                        @csrf
 
-                                    <input type="hidden" name="attendance" value="true">
+                                        <input type="hidden" name="attendance" value="true">
 
-                                    
-                                    @if (!Auth::user()->is_admin === true)
-                                        <button class="btn btn-ghost">Attendance</button>
-                                    @endif
-                                </form>
+                                        @if (!Auth::user()->is_admin === true)
+                                            <button class="btn btn-ghost">Attendance</button>
+                                        @endif
+                                    </form>
+
+                                @endif
                             @endif
                         @endif
                         </a>
                     </div>
-
                 </div>
             </div>
         </section>

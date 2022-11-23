@@ -54,12 +54,21 @@
                         </x-nav-link>
                     </div>
                 @endif
-                
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard.salaryView')" :active="request()->routeIs(['dashboard.salaryView'])">
-                        {{ __('Payroll') }}
-                    </x-nav-link>
-                </div>
+                @if (Auth::user()->is_admin === '0')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('dashboard.salaryView')" :active="request()->routeIs(['dashboard.salaryView'])">
+                            {{ __('Payroll') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
+                @if (Auth::user()->is_admin === '0')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('dashboard.absent.create')" :active="request()->routeIs(['dashboard.absent.create'])">
+                            {{ __('Request Absent Leave') }}
+                        </x-nav-link>
+                    </div>
+                @endif
 
 
             </div>
