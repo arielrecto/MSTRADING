@@ -57,7 +57,7 @@
                                 </td>
 
                                 <td>
-                                    {{money_format('₱ %i', $payroll->total)}}
+                                    {{'₱ ' . number_format($payroll->total, '2', '.', ',')}}
                                 </td>
 
                                 <td>
