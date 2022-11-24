@@ -56,7 +56,7 @@
                                 <th>{{ $doublePay->type }}</th>
                                 <td>{{ $doublePay->rate }}</td>
                                 <td>{{ $carbon::parse($doublePay->date_start)->format('F d Y') }}</td>
-                                <td>{{ $carbon::parse($doublePay->end_date)->format('F d Y') }}</td>
+                                <td>{{ $carbon::parse($doublePay->date_end)->format('F d Y') }}</td>
                                 <td>{{ $doublePay->is_active ? 'Active' : 'End' }}</td>
                                 <td>
                                     <div class="flex space-x-5">
