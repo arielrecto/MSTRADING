@@ -25,6 +25,7 @@ class User extends Authenticatable
             'is_admin',
             'position_id',
             'on_leave',
+            'reason'
     ];
 
     /**

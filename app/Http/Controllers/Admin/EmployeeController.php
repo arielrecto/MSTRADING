@@ -45,7 +45,7 @@ class EmployeeController extends Controller
     public function store(Request $request, $id)
     {
 
-      $user = User::find($id);
+        $user = User::find($id);
         $data = $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -81,14 +81,21 @@ class EmployeeController extends Controller
 
         if ($request->phil_health !== null) {
 
-            $salary_deduction = DeductionSalary::where('name', '=', 'Phil Health')->get()->first();
-            $user->deductionSalary()->attach($salary_deduction->id);
+            if (DeductionSalary::count() !== 0) {
+
+                $salary_deduction = DeductionSalary::where('name', '=', 'Phil Health')->get()->first();
+                $user->deductionSalary()->attach($salary_deduction->id);
+            }
         }
 
         if ($request->pag_ibig !== null) {
 
-            $salary_deduction = DeductionSalary::where('name', '=', 'PagIbig')->get()->first();
-            $user->deductionSalary()->attach($salary_deduction->id);
+            if (DeductionSalary::count() !== 0) {
+
+
+                $salary_deduction = DeductionSalary::where('name', '=', 'PagIbig')->get()->first();
+                $user->deductionSalary()->attach($salary_deduction->id);
+            }
         }
 
 
@@ -213,11 +220,22 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $user = User::find($id)->delete();
 
-        return redirect()->route('admin.employee.index')->with(['message' => 'Successfully Deleted']);
+
+        $user = User::find($id);
+
+
+         $user->update([
+         'reason' => $request->reason_select === null ? $request->reason : $request->reason_select,
+         ]);
+
+    
+
+         $user->delete();
+
+         return redirect()->route('admin.employee.index')->with(['message' => 'Successfully Deleted']);
     }
 
     public function addprofile($id)

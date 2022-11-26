@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->foreignIdFor(Position::class)->nullable();
             $table->boolean('on_leave')->default(false);
             $table->rememberToken();
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }

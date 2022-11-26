@@ -80,11 +80,7 @@
                                         class="ml-auto">{{ $carbon::parse($employee->created_at)->format('F d Y') }}</span>
                                 </li>
                                 <li class="flex items-center py-3 space-x-10">
-                                    <form action="{{ route('admin.employee.delete', ['id' => $employee->id]) }}"
-                                        method="POST">
-                                        @csrf
-                                        <button type="submit" class=" btn btn-error">Archive</button>
-                                    </form>
+                                    <label for="my-modal-3" class="btn btn-error">Archive</label>
                                     <div>
                                         <a href="{{ route('admin.employee.edit', ['id' => $employee->id]) }}">
                                             <button class="btn btn-ghost">Update</button>
@@ -137,7 +133,7 @@
                                         </div>
                                         <div class="grid grid-cols-2">
                                             <div class="px-4 py-2 font-semibold">Religion</div>
-                                            <div class="px-4 py-2">{{ $employee->profile->religion}}</div>
+                                            <div class="px-4 py-2">{{ $employee->profile->religion }}</div>
                                         </div>
                                         <div class="grid grid-cols-2">
                                             <div class="px-4 py-2 font-semibold">Birthday</div>
@@ -222,6 +218,39 @@
                 </div>
             </div>
         </div>
+    </div>
 
+
+    <!-- Put this part before </body> tag -->
+    <input type="checkbox" id="my-modal-3" class="modal-toggle" />
+    <div class="modal">
+        <div class="modal-box relative">
+            <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+
+            <form action="{{ route('admin.employee.delete', ['id' => $employee->id]) }}" method="post"
+                class="flex flex-col space-y-5" x-data="{ open: false }">
+                @csrf
+                <h3 class="text-lg font-bold">Reason</h3>
+                <div class="flex">
+                    <select name="reason_select" class="select select-accent w-full max-w-xs">
+                        <option disabled selected>Select Reason</option>
+                        <option value="End Contract">End Contract</option>
+                        <option value="Awol">Awol</option>
+                    </select>
+                    <div class="p-2">
+                        <h1 @click="open = ! open">Others</h1>
+                    </div>
+
+                </div>
+                <div x-show="open" x-transition.duration.700ms>
+                    <input type="text" name="reason" placeholder="Other Reason"
+                        class="input input-bordered input-accent w-full max-w-xs" />
+                </div>
+                <div class="flex justify-center">
+                    <button class="btn btn-error">Delete</button>
+                </div>
+
+            </form>
+        </div>
     </div>
 @endif
