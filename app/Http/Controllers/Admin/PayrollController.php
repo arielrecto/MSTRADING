@@ -29,6 +29,10 @@ class PayrollController extends Controller
 
         $user = User::find($id);
 
+        if($user->attendances()->count() === 0) {
+            return back()->with(['message' => 'No Attendance']);
+        }
+
 
         if($user->position()->count() === 0) {
             return back()->with(['message' => 'No Position']);
@@ -40,8 +44,6 @@ class PayrollController extends Controller
         //list ng oras na pumasok sya 
         $workDays = Attendance::where('user_id', '=', $user->id)->where('is_approved', '=', 'true')->get();
 
-
-        dump($doublePayActive);
 
         //compute total of work hour
         $sumWorkHours = 0;

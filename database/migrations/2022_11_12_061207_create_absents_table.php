@@ -21,6 +21,7 @@ class CreateAbsentsTable extends Migration
             $table->foreignIdFor(User::class);
             $table->string('log_date');
             $table->boolean('is_approve')->default(false);
+            $table->boolean('is_denied')->default(false);
             $table->timestamps();
         });
     }

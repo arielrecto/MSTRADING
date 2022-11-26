@@ -1,11 +1,12 @@
 <?php
 
-use App\Models\Product;
+use App\Models\Absents;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSuppliersTable extends Migration
+class CreateAdminResponsesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,14 +15,11 @@ class CreateSuppliersTable extends Migration
      */
     public function up()
     {
-        Schema::create('suppliers', function (Blueprint $table) {
+        Schema::create('admin_responses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('address');
-            $table->string('contact');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('position');
+            $table->foreignIdFor(Absents::class);
+            $table->string('title');
+            $table->string('reason');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class CreateSuppliersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('suppliers');
+        Schema::dropIfExists('admin_responses');
     }
 }

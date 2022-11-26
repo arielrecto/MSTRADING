@@ -10,7 +10,7 @@
             
          </li>
           <li>
-            <x-sidebar-link :href="route('admin.salary.show')" :active="request()->routeIs(['admin.salary.show', 'admin.payroll.index', 'admin.payroll.show'])">
+            <x-sidebar-link :href="route('admin.salary.show')" :active="request()->routeIs(['admin.salary.show', 'admin.payroll.index', 'admin.payroll.show', 'admin.doublepay.index'])">
                <i class="ri-pie-chart-2-line mr-2 text-2xl"></i>        
                       {{ __('Salaries') }}
                
@@ -40,14 +40,6 @@
                
             </x-sidebar-link>
           </li>
-          <li>
-            <x-sidebar-link :href="route('admin.doublepay.index')" :active="request()->routeIs(['admin.doublepay.index'])">
-
-               <i class="ri-calendar-event-fill text-2xl mr-2"></i>
-               {{ __('Double Pay') }}
-               
-            </x-sidebar-link>
-          </li> 
           <li>
             <x-sidebar-link :href="route('admin.attendance.index')" :active="request()->routeIs(['admin.attendance.index'])">
 

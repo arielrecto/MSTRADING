@@ -14,7 +14,8 @@ class Absents extends Model
         'reason',
         'user_id',
         'log_date',
-        'is_approve'
+        'is_approve',
+        'is_denied'
     ];
 
 
@@ -27,6 +28,12 @@ class Absents extends Model
     public function user(){
 
         return $this->belongsTo(User::class);
+
+    }
+
+    public function adminResponse(){
+
+        return $this->hasOne(AdminResponse::class);
 
     }
 

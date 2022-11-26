@@ -7,10 +7,11 @@
                 <div class="flex justify-center">
                     <div class="tabs">
                         <a href="{{ route('admin.absent.index') }}" class="tab tab-lg tab-bordered tab-active">Request</a>
-                        <a href="{{route('admin.absent.usersOnLeave')}}" class="tab tab-lg tab-bordered">Employee On Leave</a>
+                        <a href="{{ route('admin.absent.usersOnLeave') }}" class="tab tab-lg tab-bordered">Employee On
+                            Leave</a>
                     </div>
                 </div>
-    
+
 
                 <table class="table w-full">
 
@@ -51,15 +52,21 @@
                     <tbody>
                         @forelse ($requests as $request)
                             <tr>
-                               <th>{{$request->user->name}}</th>
-                                <td>{{$request->reason}}</td>
-                                <td>{{$request->log_date}}</td>
+                                <th>{{ $request->user->name }}</th>
+                                <td>{{ $request->reason }}</td>
+                                <td>{{ $request->log_date }}</td>
                                 <td>
-                                    <form action="{{route('admin.absent.approve' ,['id' => $request->id])}}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="approve" value="true">
-                                        <button class="btn btn-success">Approve</button>
-                                    </form> 
+                                    <div class="flex space-x-2">
+                                        <form action="{{ route('admin.absent.approve', ['id' => $request->id]) }}"
+                                            method="post">
+                                            @csrf
+                                            <input type="hidden" name="approve" value="true">
+                                            <button class="btn btn-success"><i class="ri-check-line"></i> Approve</button>
+                                        </form>
+                                        <a href="{{route('admin.response.create', ['id' => $request->id])}}">
+                                        <button class="btn btn-error"><i class="ri-close-line"></i> Denied</button>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -80,7 +87,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('view', {
@@ -93,4 +99,3 @@
         })
     </script>
 </x-app-layout>
-

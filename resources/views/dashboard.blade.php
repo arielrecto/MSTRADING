@@ -26,14 +26,18 @@
                     @endif
 
                     @if (!$notif)
-
-                    <div class="alert alert-success shadow-lg">
-                        <div>
-                          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                          <span>Welcome New Employee: <p class="font-bold">{{$user->name}}</p></span>
-                        </div>
-                      </div>
-
+                        @if ($user->is_admin === '0')
+                            <div class="alert alert-success shadow-lg">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Welcome New Employee: <p class="font-bold">{{ $user->name }}</p></span>
+                                </div>
+                            </div>
+                        @endif
                     @else
                         @if ($notif->is_viewed === 'false' && $notif->is_approved === 'true')
                             <div class="alert alert-info shadow-lg w-full">
@@ -56,7 +60,7 @@
                     @endif
 
 
-                    @if ($user->profile()->get()->isEmpty())
+                    @if ($user->profile()->get()->isEmpty() && $user->is_admin !== '1')
                         <div class="p-5 border border-2-solid flex flex-col bg-gray-50 border rounded-lg p-5">
                             <div class="flex justify-center text-5xl font-bold">
                                 <h1>Profile</h1>

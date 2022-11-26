@@ -6,16 +6,14 @@
             <div class="flex justify-center">
                 <div class="tabs">
                     <a href="{{ route('admin.product.index') }}" class="tab tab-lg tab-bordered ">Order Products</a>
-                    <a href="" class="tab tab-lg tab-bordered">Arrived Products</a>
-                    <a href="" class="tab tab-lg tab-bordered">Product Stocks</a>
-                    <a href="" class="tab tab-lg tab-bordered">Pop Products</a>
+                    <a href="{{route('admin.product.recieved')}}" class="tab tab-lg tab-bordered">Arrived Products</a>
+                    <a href="{{route('admin.product.stock')}}" class="tab tab-lg tab-bordered">Product Stocks</a>
+                    <a href="{{route('admin.product.pop')}}" class="tab tab-lg tab-bordered">Pop Products</a>
                     <a href="{{ route('admin.supplier.index') }}"
                         class="tab tab-lg tab-bordered tab-active">Supplier</a>
                 </div>
             </div>
-
-            <form action="{{ route('admin.supplier.store') }}" method="post" class="flex justify-center p-2">
-                @csrf
+            <div class="flex justify-center">
                 <div class="w-1/2 p-5">
                     <div class="overflow-x-auto p-2 bg-white border border-grey-3 rounded-lg" x-data="$store.view">
                         <div class="w-full p-5">
@@ -41,20 +39,18 @@
                                     for="grid-state">
                                     company name
                                 </label>
-                                <input
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded 
-                py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="grid-last-name" name="name" type="text" placeholder="">
+                                <label class="font-bold text-xl">
+                                    {{$supplier->name}}
+                                </label>
                             </div>
                             <div class="py-2">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                     for="grid-state">
                                     Address
                                 </label>
-                                <input
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded 
-                py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="grid-last-name" name="address" type="text" placeholder="">
+                               <label class="font-bold text-xl">
+                                {{$supplier->address}}
+                               </label>
                             </div>
 
                             <div class="py-2">
@@ -63,14 +59,8 @@
                                         for="grid-state">
                                         Cell Phone #
                                     </label>
-                                    <label class="input-group input-group-lg">
-                                        <span>+63</span>
-                                        <input type="hidden" name="cell_prefix" value="+63">
-                                        <input
-                                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded 
-                                        py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                            type="text" placeholder="" name="contact" maxlength="10"
-                                            class="input input-bordered w-full" />
+                                    <label class="font-bold text-xl">
+                                        {{$supplier->contact}}
                                     </label>
                                 </div>
                             </div>
@@ -85,10 +75,9 @@
                                             for="grid-state">
                                             first name
                                         </label>
-                                        <input
-                                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded 
-                    py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                            id="grid-last-name" name="first_name" type="text" placeholder="">
+                                       <label for="" class="font-bold text-xl">
+                                        {{$supplier->first_name}}
+                                       </label>
                                     </div>
                                     <div class="py-2">
                                         <label
@@ -96,10 +85,9 @@
                                             for="grid-state">
                                             last name
                                         </label>
-                                        <input
-                                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded 
-                    py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                            id="grid-last-name" name="last_name" type="text" placeholder="">
+                                        <label for="" class="font-bold text-xl">
+                                            {{$supplier->last_name}}
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="py-2">
@@ -107,29 +95,23 @@
                                         for="grid-state">
                                         position
                                     </label>
-                                    <input
-                                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded 
-                py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        id="grid-last-name" name="position" type="text" placeholder="">
+                                    <label for="" class="font-bold text-xl">{{$supplier->position}}</label>
                                 </div>
-                            </div>
-                            <div class="flex justify-center">
-                                <button class="btn btn-wide ">Add</button>
                             </div>
                         </div>
                     </div>
-            </form>
+                </div>
+            </div>
         </div>
-    </div>
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('view', {
-                on: false,
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.store('view', {
+                    on: false,
 
-                toggle() {
-                    this.on = !this.on
-                }
+                    toggle() {
+                        this.on = !this.on
+                    }
+                })
             })
-        })
-    </script>
+        </script>
 </x-app-layout>

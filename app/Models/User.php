@@ -24,7 +24,7 @@ class User extends Authenticatable
             'password',
             'is_admin',
             'position_id',
-            'on_leave'
+            'on_leave',
     ];
 
     /**
@@ -104,6 +104,11 @@ class User extends Authenticatable
     public function absences() {
 
         return $this->hasMany(Absents::class);
+
+    }
+    public function adminResponse(){
+
+        return $this->hasOne(AdminResponse::class);
 
     }
 }

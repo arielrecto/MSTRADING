@@ -10,15 +10,18 @@ use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PayrollController;
 use App\Http\Controllers\Admin\PDFController;
 use App\Http\Controllers\Admin\PositionController;
+use App\Http\Controllers\Admin\ResponseController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Employee\RecordController;
+use App\Http\Controllers\Employee\ResponseController as EmployeeResponseController;
 use App\Http\Controllers\ProductController;
 use App\Models\Attendance;
 use App\Models\DeductionSalary;
 use App\Models\DoublePay;
 use App\Models\Payroll;
 use App\Models\Product;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/edit/id={id}', [EmployeeController::class, 'edit'])->name('edit');
                 Route::post('/delete/id={id}', [EmployeeController::class, 'destroy'])->name('delete');
                 Route::get('/employee/archive', [EmployeeController::class, 'archive'])->name('archive');
+                Route::post('/regular/id={id}',[EmployeeController::class, 'regular'])->name('regular');
             });
 
             //admin/product
@@ -145,6 +149,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/store', [SupplierController::class, 'store'])->name('store');
                 Route::get('/edit/id={id}', [SupplierController::class, 'edit'])->name('edit');
                 Route::post('/update/id={id}',[SupplierController::class, 'update'])->name('update');
+                Route::get('/show/id={id}', [SupplierController::class, 'show'])->name('show');
             });
 
 
@@ -166,6 +171,11 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/users/onleave',[AbsentController::class, 'usersOnLeave'])->name('usersOnLeave');
                 Route::post('/user/update/active/id={id}', [AbsentController::class, 'userActive'])->name('userActive');
             });
+            //response
+            Route::group(['prefix' => 'response', 'as' => 'response.'], function (){
+                Route::post('/store/id={id}', [ResponseController::class, 'store'])->name('store');
+                Route::get('/create/id={id}', [ResponseController::class, 'create'])->name('create');
+            });
         });
     });
 
@@ -181,6 +191,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/create', [AbsentController::class, 'create'])->name('create');
             Route::post('/store', [AbsentController::class, 'store'])->name('store');
 
+        });
+
+        Route::group(['prefix' => 'response', 'as' => 'response.'], function(){
+           Route::get('/index', [EmployeeResponseController::class, 'index'])->name('index');
+           Route::get('/show/id={id}', [EmployeeResponseController::class, 'show'])->name('show');
         });
 
         Route::get('/index', [RecordController::class, 'index'])->name('index');

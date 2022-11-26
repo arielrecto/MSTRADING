@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeductionSalary;
 use App\Models\DoublePay;
 use App\Models\Image;
 use App\Models\Product;
@@ -42,22 +43,25 @@ class RecordController extends Controller
     {
 
 
+
+
         $data = $request->validate([
             'first_name' => 'required',
-            'middle_name' => 'required',
             'last_name' => 'required',
             'age' => 'required',
             'birth_date' => 'required',
             'marital_status' => 'required',
             'religion' => 'required',
             'citizenship' => 'required',
-            'social_num' => 'string',
             'address' => 'required',
-            'phil_health' => 'string',
-            'pag_ibig' => 'string',
-            'tin_no' => 'string',
-            'cell_no' => 'string',
-            'gender' => 'required'
+            'city' => 'required',
+            'zipcode' => 'required',
+            'state' => 'required',
+            'cell_no' => 'required',
+            'gender' => 'required',
+            'contact_last_name' => 'required',
+            'contact_first_name' => 'required',
+            'contact_cell_no' => 'required'
         ]);
 
 
@@ -74,8 +78,46 @@ class RecordController extends Controller
         }
 
 
-        $user = Auth::user()->profile()->create($data);
+        if ($request->phil_health !== null) {
+            if (DeductionSalary::count() !== 0) {
+                $salary_deduction = DeductionSalary::where('name', '=', 'Phil Health')->get()->first();
+                Auth::user()->deductionSalary()->attach($salary_deduction->id);
+            }
+        }
 
+        if ($request->pag_ibig !== null) {
+            if (DeductionSalary::count() !== 0) {
+                $salary_deduction = DeductionSalary::where('name', '=', 'PagIbig')->get()->first();
+                Auth::user()->deductionSalary()->attach($salary_deduction->id);
+            }
+        }
+
+
+
+        $user = Auth::user()->profile()->create([
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name === null ? 'N/A' : $request->middle_name,
+            'last_name' => $request->last_name,
+            'age' => $request->age,
+            'birth_date' => $request->birth_date,
+            'gender' => $request->gender,
+            'marital_status' => $request->marital_status,
+            'religion' => $request->religion,
+            'citizenship' => $request->citizenship,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'zipcode' => $request->zipcode,
+            'phil_health' => $request->phil_health === null ? 'N\A' : $request->phil_health,
+            'pag_ibig' => $request->pag_ibig === null ? 'N\A' : $request->pag_ibig,
+            'tin_no' => $request->tin_no === null ? 'N\A' : $request->time_no,
+            'cell_no' =>  $request->cell_prefix . $request->cell_no,
+            'telephone' => $request->telephone === null ? 'N\A' : $request->telephone,
+            'contact_first_name' => $request->contact_first_name,
+            'contact_last_name' => $request->contact_last_name,
+            'contact_middle_name' => $request->contact_middle_name === null ? ' ' : $request->contact_middle_name,
+            'contact_cell_no' => $request->cell_prefix . $request->contact_cell_no
+        ]);
 
         return redirect()->route('dashboard.index')->with(['message' => 'Profile Successfully Created']);
     }

@@ -1,3 +1,12 @@
+@php
+    $total = 0;
+
+    foreach ($payroll->user->deductionSalary()->get() as $deduction) {
+        $total = $total + $deduction['amount'];
+    }
+
+@endphp
+
 <x-app-layout>
     <div class="flex space-x-2">
         <x-sidebar />
@@ -71,7 +80,7 @@
                                     <!-- row 2 -->
                                     <tr>
                                         <td>Salary Rate</td>
-                                        <td>{{ $payroll->salary_rate }}</td>
+                                        <td>₱ {{ number_format($payroll->salary_rate,2,'.',',' )}}</td>
 
                                     </tr>
                                     <tr>
@@ -80,7 +89,7 @@
                                     </tr>
                                     <tr>
                                         <td>Over Time Salary</td>
-                                        <td>{{$payroll->overtime_salary}}</td>
+                                        <td>₱ {{number_format($payroll->overtime_salary, 2, '.', ',')}}</td>
                                     </tr>
 
                                     <tr>
@@ -93,11 +102,16 @@
                                     @foreach ($payroll->user->deductionSalary()->get() as $deduction)
                                         <tr>
                                             <td>{{ $deduction['name'] }}</td>
-                                            <td>{{ $deduction['amount'] }}</td>
+                                            <td>₱ {{ number_format($deduction['amount'], 2,'.', ',' )}}</td>
 
                                         </tr>
                                     @endforeach
-                                        <td></td>
+                                    <tr>
+                                        <td>Total Deduction</td>
+                                        <td>₱ {{ number_format($total, 2,'.', ',' )}}</td>
+
+                                    </tr>
+                                        <td>Total</td>
                                         <td> ₱ {{ number_format($payroll->total, 2, '.', ',') }}</td>
 
                                     </tr>
@@ -113,8 +127,6 @@
                             <input type="hidden" name="isApproved" value="true">
                             <button class="btn btn-success">Approve</button>
                         </form>
-
-                        <a href="{{route('admin.payroll.edit', ['id' => $payroll->id])}}" class="btn">Add Deduction</a>
                     </div>
                 </div>
 

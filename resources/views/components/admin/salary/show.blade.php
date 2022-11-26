@@ -80,7 +80,11 @@
                         </div>
                     </div>
                 @endif
-
+                <div class="flex w-full flex-row-reverse">
+                    <a href="{{route('admin.doublepay.index')}}">
+                        <button class="btn btn-success mr-5">Double Pay</button>
+                    </a>
+                </div>
                 <table class="table w-full">
                     <!-- head -->
                     <thead>
@@ -119,13 +123,13 @@
                                 <td>
 
                                     <div class="flex space-x-5">
-                                        @if($employee->on_leave !== '1')
-                                        <form class="p-3"
-                                            action="{{ route('admin.payroll.store', ['id' => $employee->id]) }}"
-                                            method="post">
-                                            @csrf
-                                            <button>Generate Payroll</button>
-                                        </form>
+                                        @if ($employee->on_leave !== '1')
+                                            <form class="p-3"
+                                                action="{{ route('admin.payroll.store', ['id' => $employee->id]) }}"
+                                                method="post">
+                                                @csrf
+                                                <button>Generate Payroll</button>
+                                            </form>
                                         @endif
                                         @if ($employee->payroll()->count() > 0)
                                             <a href="{{ route('admin.payroll.show', ['id' => $employee->id]) }}">

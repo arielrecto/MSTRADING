@@ -22,7 +22,12 @@
                     @else 
                          <p class="mt-2 font-sans font-light text-white">Position: {{$employee->position->name ?? 'N/A'}}</p>
                     @endif
+
+                    @if($employee->profile()->count() !== 0)
+                    <h3 class="text-white text-sm bold font-sans">{{$employee->profile->status}}</h3>
+                    @endif
                 </div>
+                
                 <div class="flex justify-center pb-3 text-white">
                     <div class="text-center mr-3 border-r pr-3">
                         <a href="{{route('admin.employee.show', ['id'=> $employee->id])}}"> View Profile</a>

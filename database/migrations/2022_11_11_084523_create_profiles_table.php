@@ -17,7 +17,7 @@ class CreateProfilesTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('age');
             $table->string('gender');
@@ -25,11 +25,21 @@ class CreateProfilesTable extends Migration
             $table->string('religion');
             $table->string('citizenship');
             $table->string('address');
+            $table->string('city');
+            $table->string('state');
+            $table->string('zipcode');
             $table->string('phil_health')->nullable();
             $table->string('pag_ibig')->nullable();
             $table->string('tin_no')->nullable();
             $table->string('cell_no')->nullable();
+            $table->string('telephone')->nullable();
             $table->date('birth_date');
+            $table->string('contact_first_name');
+            $table->string('contact_last_name');
+            $table->string('contact_middle_name');
+            $table->string('contact_cell_no');
+            $table->string('employee_type')->nullable();
+            $table->string('status')->default('New Employee');
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

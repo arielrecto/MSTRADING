@@ -20,10 +20,20 @@ class Profile extends Model
         'religion',
         'citizenship',
         'address',
+        'city',
+        'state',
+        'zipcode',
         'phil_health',
         'pag_ibig',
         'tin_no',
-        'cell_no'
+        'cell_no',
+        'telephone',
+        'contact_first_name',
+        'contact_middle_name',
+        'contact_last_name',
+        'contact_cell_no',
+        'employee_type',
+        'status'
     ];
 
 

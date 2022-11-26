@@ -59,7 +59,7 @@
                                 <td>{{ $supplier->contact }}</td>
                                 <td>
                                     <div class="flex space-x-5">
-                                        <a class="bg-green-300 p-2 rounded-lg" href="http://">
+                                        <a class="bg-green-300 p-2 rounded-lg" href="{{route('admin.supplier.show', ['id'=>$supplier->id])}}">
                                             <i class="ri-eye-line"> </i>
                                         </a>
                                         <a href="{{route('admin.supplier.edit', ['id' => $supplier])}}" class="bg-blue-300 p-2 rounded-lg" href="http://">

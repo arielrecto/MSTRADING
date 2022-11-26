@@ -70,6 +70,12 @@
                     </div>
                 @endif
 
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('dashboard.response.index')" :active="request()->routeIs(['dashboard.response.index', 'dashboard.response.show'])">
+                        {{ __('Admin Response') }}
+                    </x-nav-link>
+                </div>
+
 
             </div>
 

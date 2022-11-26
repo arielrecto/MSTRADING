@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
-use App\Models\Absents;
-use App\Models\User;
+use App\Models\AdminResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AbsentController extends Controller
+class ResponseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +16,9 @@ class AbsentController extends Controller
      */
     public function index()
     {
+        $absents = Auth::user()->absences()->get();
 
-    $requests = Absents::where('is_denied', '=', false)->where('is_approve', '=', false)->latest()->get();
-        return view('components.admin.leave.index', compact(['requests']));
+        return view('components.employee.response.index', compact(['absents']));
     }
 
     /**
@@ -29,7 +28,7 @@ class AbsentController extends Controller
      */
     public function create()
     {
-        return view('components.employee.absent.create');
+        //
     }
 
     /**
@@ -40,16 +39,7 @@ class AbsentController extends Controller
      */
     public function store(Request $request)
     {
-
-        $user = Auth::user();
-        Absents::create([
-            'reason' => $request->reason,
-            'user_id' => $user->id,
-            'log_date' => now()->setTimezone('Asia/Manila')->toDateString()
-        ]);
-
-
-        return redirect()->route('dashboard.index')->with(['message' => 'Wait for Approval of your request']);
+        //
     }
 
     /**
@@ -60,7 +50,9 @@ class AbsentController extends Controller
      */
     public function show($id)
     {
-       
+        
+        $response = AdminResponse::find($id);
+        return view('components.employee.response.show', compact(['response']));
     }
 
     /**
@@ -95,41 +87,5 @@ class AbsentController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function approve(Request $request, $id){
-
-        $absent = Absents::find($id);
-
-
-        $absent->update([
-            'is_approve' => $request->approve
-        ]);
-
-        $absent->user->update([
-            'on_leave' => true
-        ]);
-        return back()->with(['message' => 'Approved']);
-    }
-    public function usersOnLeave(){
-
-        $users = User::where('on_leave', '=', '1')->get();
-
-
-        return view('components.admin.leave.userOnLeave', compact(['users']));
-
-    }
-    public function userActive(Request $request, $id){
-
-        $user = User::find($id);
-
-
-
-        $user->update([
-            'on_leave' => $request->active
-        ]);
-
-
-        return back()->with(['message' => 'User is Active']);
     }
 }

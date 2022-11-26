@@ -26,10 +26,21 @@ class SupplierController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'address' => 'required',
-            'contact' => 'required'
+            'contact' => 'required',
+            'first_name'=>'required',
+            'last_name' => 'required',
+            'contact' => 'required',
+            'position' => 'required'
         ]);
 
-        $_suppliers = Supplier::create($data);
+        $_suppliers = Supplier::create([
+            'name' => $request->name,
+            'address' => $request->address, 
+            'contact' => $request->cell_prefix . $request->contact,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'position' => $request->position
+        ]);
 
 
 
@@ -68,5 +79,12 @@ class SupplierController extends Controller
 
 
         return redirect()->back()->with(['message' => 'Supplier Data Updated Successfully']);
+    }
+    public function show ($id) {
+
+        $supplier = Supplier::find($id);
+
+        return view('components.admin.supplier.show', compact(['supplier']));
+
     }
 }
