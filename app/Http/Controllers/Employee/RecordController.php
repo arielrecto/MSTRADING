@@ -76,22 +76,6 @@ class RecordController extends Controller
         }
 
 
-        if ($request->phil_health !== null) {
-            if (DeductionSalary::count() !== 0) {
-                $salary_deduction = DeductionSalary::where('name', '=', 'Phil Health')->get()->first();
-                Auth::user()->deductionSalary()->attach($salary_deduction->id);
-            }
-        }
-
-        if ($request->pag_ibig !== null) {
-            if (DeductionSalary::count() !== 0) {
-                $salary_deduction = DeductionSalary::where('name', '=', 'PagIbig')->get()->first();
-                Auth::user()->deductionSalary()->attach($salary_deduction->id);
-            }
-        }
-
-
-
         $user = Auth::user()->profile()->create([
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name === null ? 'N/A' : $request->middle_name,

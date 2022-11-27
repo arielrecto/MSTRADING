@@ -1,5 +1,6 @@
 @props([
     'employee' => [],
+    'deductions' => []
 ])
 
 @inject('carbon', 'Carbon\Carbon')
@@ -87,6 +88,26 @@
                                         </a>
                                     </div>
                                 </li>
+                                @foreach ($deductions as $deduction)
+
+
+                                @if($employee->deductionSalary()->where('name', '=' , $deduction->name)->count() === 0)
+                                <form action="{{route('admin.deduction.setDeduction', ['id' => $employee->id])}}" method="post">
+                                    @csrf
+                                    <li>
+                                    <label class="input-group flex space-x-20">
+                                        <label for="" class="pt-2 pb-2">{{$deduction->name}}</label>
+                                        <input type="hidden" name="deduction" value="{{$deduction->name}}"/>
+                                        <button class="btn">Add</button>
+                                      </label>
+                                    </li>
+                                </form>
+
+                                @else
+                                    <li>{{$deduction->name}}</li>
+                                @endif
+                                    
+                                @endforeach
                                 <li>
                                     @if ($employee->profile->status === 'New Employee')
                                         <div class="flex justify-center">

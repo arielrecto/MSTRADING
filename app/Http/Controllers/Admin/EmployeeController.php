@@ -79,27 +79,6 @@ class EmployeeController extends Controller
         }
 
 
-        if ($request->phil_health !== null) {
-
-            if (DeductionSalary::count() !== 0) {
-
-                $salary_deduction = DeductionSalary::where('name', '=', 'Phil Health')->get()->first();
-                $user->deductionSalary()->attach($salary_deduction->id);
-            }
-        }
-
-        if ($request->pag_ibig !== null) {
-
-            if (DeductionSalary::count() !== 0) {
-
-
-                $salary_deduction = DeductionSalary::where('name', '=', 'PagIbig')->get()->first();
-                $user->deductionSalary()->attach($salary_deduction->id);
-            }
-        }
-
-
-
         $user->profile()->create([
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name === null ? 'N/A' : $request->middle_name,
@@ -139,8 +118,8 @@ class EmployeeController extends Controller
     {
         $employee = User::find($id);
 
-
-        return view('components.admin.dashboard', compact(['employee']));
+        $deductions = DeductionSalary::get();
+        return view('components.admin.dashboard', compact(['employee', 'deductions']));
     }
 
     /**
@@ -153,7 +132,8 @@ class EmployeeController extends Controller
     {
         $employee = User::find($id);
         $positions = Position::all();
-        return view('components.admin.dashboard', compact(['employee', 'positions']));
+        $deductions = DeductionSalary::all();
+        return view('components.admin.dashboard', compact(['employee', 'positions', 'deductions']));
     }
 
     /**
@@ -191,20 +171,6 @@ class EmployeeController extends Controller
             'employee_type' => $request->employee_type
         ]);
 
-        if ($request->pag_ibig !== null) {
-            $salary = DeductionSalary::where('name', '=', 'PagIbig')->get()->first();
-
-            $user->deductionSalary()->attach($salary->id);
-        }
-
-        if (Position::count() !== 0) {
-            if ($user->position()->count() === 0) {
-                $setposition = Position::where('name', $request->position)->first();
-                $user->update([
-                    'position_id' => $setposition->id
-                ]);
-            }
-        }
         $user->update([
             'name' => $request->input('name') !== null ? $request->input('name') : $user->name,
             'email' => $request->input('email') !== null ? $request->input('email') : $user->email

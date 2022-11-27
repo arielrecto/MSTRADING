@@ -144,9 +144,9 @@
                 </div>
             </div>
         @elseif(Route::is('admin.employee.show', ['id' => $employee->id]))
-            <x-admin.employee.show :employee="$employee" />
+            <x-admin.employee.show :employee="$employee" :deductions="$deductions"/>
         @elseif(Route::is('admin.employee.edit', ['id' => $employee->id]))
-            <x-admin.employee.update :employee="$employee" />
+            <x-admin.employee.update :employee="$employee"/>
         @endif
 
     </div>

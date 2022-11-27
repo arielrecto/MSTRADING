@@ -1,7 +1,7 @@
 @props([
     'employee' => [],
-    'positions' => []
-]);
+    'positions' => [],
+])
 
 <form method="POST" action="{{route('admin.employee.update', ['id' => $employee->id])}}" enctype="multipart/form-data">
     @foreach ($errors->all() as $error)

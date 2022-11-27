@@ -37,17 +37,15 @@ class DeductionController extends Controller
 
     public function setDeduction(Request $request, $id){  
 
-        dump($request->all());
-
         $user = User::find($id);
 
-        $deduction = DeductionSalary::where('name', '=' , $request->deduction)->first();
+         $deduction = DeductionSalary::where('name', '=' , $request->deduction)->first();
 
-        $user->deductionSalary()->attach($deduction->id);
+         $user->deductionSalary()->attach($deduction->id);
 
 
 
-        return redirect()->back()->with(['messsage' => 'added Sucesss']);
+         return redirect()->back()->with(['messsage' => 'added Sucesss']);
 
     }
 
