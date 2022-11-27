@@ -85,7 +85,7 @@ class RecordController extends Controller
             'gender' => $request->gender,
             'marital_status' => $request->marital_status,
             'religion' => $request->religion_other === null ? $request->religion : $request->religion_other,
-            'citizenship' => $request->citizenship_other === null ? $request->citizensip : $request->citizenship_other,
+            'citizenship' => $request->citizenship_other === null ? $request->citizenship : $request->citizenship_other,
             'address' => $request->address,
             'city' => $request->city,
             'state' => $request->state,
