@@ -176,8 +176,13 @@ class EmployeeController extends Controller
             'email' => $request->input('email') !== null ? $request->input('email') : $user->email
         ]);
 
+        $position = Position::where('name', '=', $request->position)->get()->first();
 
-        return redirect()->back()->with(['message' => 'Updated']);
+        $user->update([
+             'position_id' => $position->id
+         ]);
+
+         return redirect()->back()->with(['message' => 'Updated']);
     }
 
     /**
