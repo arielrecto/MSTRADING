@@ -12,6 +12,7 @@ class DeductionSalary extends Model
     protected $fillable = [
         'name',
         'amount',
+        'range',
         'user_id',
     ];
 

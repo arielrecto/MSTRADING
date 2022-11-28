@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\Admin\ResponseController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Employee\RecordController;
 use App\Http\Controllers\Employee\ResponseController as EmployeeResponseController;
 use App\Http\Controllers\ProductController;
@@ -110,6 +111,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/approve/id={id}',[PayrollController::class, 'isApprove'])->name('approve');
                 Route::get('/edit/id={id}', [PayrollController::class, 'editPayroll'])->name('edit');
                 Route::post('/updatePayroll/id={id}', [PayrollController::class, 'updatePayroll'])->name('updatePayroll');
+                Route::post('/delete/id={id}', [PayrollController::class, 'destroy'])->name('delete');
             });
             //double pay
             Route::group(['prefix' => 'doublepay', 'as' => 'doublepay.'], function () {
@@ -176,6 +178,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/store/id={id}', [ResponseController::class, 'store'])->name('store');
                 Route::get('/create/id={id}', [ResponseController::class, 'create'])->name('create');
             });
+            //Tax
+            // Route::group(['prefix' => 'tax', 'as' => 'tax.'], function(){
+            //     Route::get('/create', [TaxController::class, 'create'])->name('create');
+            //     Route::post('/store', [TaxController::class, 'store'])->name('store');
+            //     Route::get('/index', [TaxController::class, 'index'])->name('index');
+            // });
         });
     });
 

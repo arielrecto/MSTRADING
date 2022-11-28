@@ -29,13 +29,14 @@ class RecordController extends Controller
 
 
             $notif = false;
+            $deductions = DeductionSalary::get();
 
-            return view('dashboard', compact(['user', 'notif']));
+            return view('dashboard', compact(['user', 'notif', 'deductions']));
         }
 
         $notif = $user->payroll->where('is_approved', '=', 'true')->latest()->first();
 
-        return view('dashboard', compact(['user', 'notif']));
+        return view('dashboard', compact('user', 'notif'));
     }
 
 
@@ -75,7 +76,6 @@ class RecordController extends Controller
             ]);
         }
 
-
         $user = Auth::user()->profile()->create([
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name === null ? 'N/A' : $request->middle_name,
@@ -92,6 +92,7 @@ class RecordController extends Controller
             'zipcode' => $request->zipcode,
             'phil_health' => $request->phil_health === null ? 'N\A' : $request->phil_health,
             'pag_ibig' => $request->pag_ibig === null ? 'N\A' : $request->pag_ibig,
+            'social_num' => $request->social_num === null ? 'N\A' : $request->social_num,
             'tin_no' => $request->tin_no === null ? 'N\A' : $request->time_no,
             'cell_no' =>  $request->cell_prefix . $request->cell_no,
             'telephone' => $request->telephone === null ? 'N\A' : $request->telephone,
@@ -100,6 +101,39 @@ class RecordController extends Controller
             'contact_middle_name' => $request->contact_middle_name === null ? ' ' : $request->contact_middle_name,
             'contact_cell_no' => $request->cell_prefix . $request->contact_cell_no
         ]);
+
+
+
+        if ($request->phil_health !== null) {
+
+            $deduction = DeductionSalary::all();
+            if ($deduction->count() !== 0 &  $deduction->where('name', '=', 'Phil Health')->first()->count() !== 0) {
+                $deductionSalary = DeductionSalary::where('name', '=', 'Phil Health')->first();
+                Auth::user()->deductionSalary()->attach($deductionSalary->id);
+            }
+        }
+
+        if ($request->pag_ibig !== null) {
+
+            $deduction = DeductionSalary::all();
+
+            if ($deduction !== null  &  $deduction->where('name', '=', 'Pag Ibig')->first()->count() !== 0) {
+                $deductionSalary = DeductionSalary::where('name', '=', 'Pag Ibig')->first();
+                Auth::user()->deductionSalary()->attach($deductionSalary->id);
+            }
+        }
+
+
+        if ($request->social_num !== null) {
+
+            $deduction = DeductionSalary::all();
+
+            if ($deduction !== null &  $deduction->where('name', '=', 'SSS')->first()->count() !== 0) {
+                $deductionSalary = DeductionSalary::where('name', '=', 'SSS')->first();
+                Auth::user()->deductionSalary()->attach($deductionSalary->id);
+            }
+        }
+
 
         return redirect()->route('dashboard.index')->with(['message' => 'Profile Successfully Created']);
     }
@@ -214,16 +248,12 @@ class RecordController extends Controller
                     'time_in' => Carbon::now()->setTimezone('Asia/Manila')->toTimeString(),
                     'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
                 ]);
-                // return redirect()->back()->with(['message' => 'Time in Sucess']);
+                return redirect()->back()->with(['message' => 'Time in Sucess']);
             }
         };
     }
     public function getItemView()
     {
-
-
-
-
 
         $products = Product::where('status', '=', 'arrived')->get();
 
@@ -266,17 +296,18 @@ class RecordController extends Controller
     public function salaryView()
     {
 
-        $payroll = auth::user()->payroll();
+        $payroll = auth::user()->payroll()->where('is_approved', '=', 'true')->latest()->first();
 
-        if ($payroll->count() === 0) {
 
-            return back()->with(['message' => 'No Payroll yet!']);
-        }
+         if ($payroll->count() === 0) {
 
-        $payroll->latest()->first()->update([
-            'is_viewed' => true,
-            'date_viewed' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
-        ]);
-        return view('components.employee.salary.show', compact(['payroll']));
+             return back()->with(['message' => 'No Payroll yet!']);
+         }
+
+         $payroll->latest()->first()->update([
+             'is_viewed' => true,
+             'date_viewed' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
+         ]);
+         return view('components.employee.salary.show', compact(['payroll']));
     }
 }

@@ -28,6 +28,7 @@ class CreateProfilesTable extends Migration
             $table->string('city');
             $table->string('state');
             $table->string('zipcode');
+            $table->string('social_num');
             $table->string('phil_health')->nullable();
             $table->string('pag_ibig')->nullable();
             $table->string('tin_no')->nullable();

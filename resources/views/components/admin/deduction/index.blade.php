@@ -1,9 +1,13 @@
+@inject('carbon', 'Carbon\Carbon')
+
+
 <x-app-layout>
     <div class="flex w-full">
         <x-sidebar />
         <div class="flex flex-col w-full">
             <div class="w-full flex flex-row-reverse p-2">
                 <label for="my-modal-3" class="btn btn-ghost">Add Goverment Agencies</label>
+                {{-- <label for="my-modal-3"><a href="{{route('admin.tax.create')}}" class="btn btn-ghost">Add Tax</a></label> --}}
             </div>
             <div class="overflow-x-auto" x-data="$store.view">
                 <table class="table w-full">
@@ -38,14 +42,19 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Amount</th>
+                            <th>Rate</th>
+                            <th>Range</th>
+                            <th>Year</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($deductions as $deduction)
                             <tr>
                                <th>{{ $deduction->name }}</th>
-                                <td> {{ $deduction->amount }}</td>
+                                <td> {{ $deduction->amount }} %</td>
+                                <td>₱{{number_format($deduction->range, 2, '.', ',')}} - Above</td>
+                                <td>{{$carbon::parse($deduction->created_at)->format('Y')}}</td>
                                 <td>
                                     <form action="{{route('admin.deduction.destroy', ['id' => $deduction->id])}}" method="post">
                                         @csrf
@@ -80,11 +89,30 @@
             <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
             <form action="{{ route('admin.deduction.store') }}" method="POST" class="flex flex-col space-y-5">
                 @csrf
-                <h1 class="3xl capitalize">Deduction Salary</h1>
-                <input type="text" placeholder="Name" name="name"
-                    class="input input-bordered input-info w-full" />
-                <input type="text" placeholder="amount" name="amount"
-                    class="input input-bordered input-info w-full" />
+                <h1 class="text-3xl capitalize">Deduction Salary</h1>
+                <h1 class="">Goverment Agency</h1>
+                <select name="name" class="select select-accent w-full">
+                    <option disabled selected>Select Goverment Agency</option>
+                    <option value="Phil Health">Phil Health</option>
+                    <option value="SSS">SSS</option>
+                    <option value="Pag Ibig">Pag Ibig</option>
+                  </select>
+                  <div class="form-control">
+                    <h1>Salary Range</h1>
+                    <label class="input-group input-group-md">
+                      <span>₱</span>
+                      <input type="text" name="range" placeholder="Salary Above" class="input input-bordered input-md w-full" />
+                    </label>
+                  </div>
+                  <div class="form-control">
+                    <label class="label">
+                      <span class="label-text">Rate</span>
+                    </label>
+                    <label class="input-group">
+                      <input name="amount" type="text" placeholder="" class="input input-bordered w-full" />
+                      <span>%</span>
+                    </label>
+                  </div>
                 <button class="btn btn-success">Add</button>
             </form>
         </div>

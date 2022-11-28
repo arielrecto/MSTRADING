@@ -18,6 +18,7 @@ class CreateDeductionSalariesTable extends Migration
         Schema::create('deduction_salaries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('range');
             $table->string('amount');
             $table->timestamps();
         });

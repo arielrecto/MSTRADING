@@ -4,7 +4,6 @@
             {{ __('Dashboard Employee') }}
         </h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -24,7 +23,6 @@
                             </div>
                         </div>
                     @endif
-
                     @if (!$notif)
                         @if ($user->is_admin === '0')
                             <div class="alert alert-success shadow-lg">
@@ -59,15 +57,13 @@
 
                     @endif
 
-
                     @if ($user->profile()->get()->isEmpty() && $user->is_admin !== '1')
                         <div class="p-5 border border-2-solid flex flex-col bg-gray-50 border rounded-lg p-5">
                             <div class="flex justify-center text-5xl font-bold">
                                 <h1>Profile</h1>
                             </div>
-
-
-                            <x-employee.create />
+                            
+                            <x-employee.create  :deductions="$deductions"/>
 
                         </div>
                     @else

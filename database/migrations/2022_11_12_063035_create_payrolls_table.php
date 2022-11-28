@@ -29,6 +29,7 @@ class CreatePayrollsTable extends Migration
             $table->string('deduction_amount')->nullable();
             $table->foreignIdFor(User::class);
             $table->string('total');
+            $table->string('tax');
             $table->boolean('is_approved')->default(false);
             $table->boolean('is_viewed')->default(false);
             $table->date('date_viewed')->nullable();

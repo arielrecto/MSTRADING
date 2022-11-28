@@ -88,19 +88,57 @@ class PayrollController extends Controller
         }
 
 
-
-        $totalDeduct = 0;
-        foreach ($user->deductionSalary()->get() as $deduction) {
-            $totalDeduct = $totalDeduct + $deduction['amount'];
-        }
-
+    
         $totalSalary = 0;
         if ($user->deductionSalary()->count() === 0) {
 
             $totalSalary = ($sumWorkHours / $hourWork) * $salaryRate;
         } else {
 
-            $totalSalary = (($sumWorkHours / $hourWork) * $salaryRate) - $totalDeduct;
+            $totalSalary = (($sumWorkHours / $hourWork) * $salaryRate);
+        }
+
+        $totalDeduct = 0;
+        foreach ($user->deductionSalary()->get() as $deduction) {
+
+            $sumDeduct = 0;
+            if($totalSalary > $deduction['range']) {
+
+                $sumDeduct = $totalSalary * ($deduction['amount'] / 100);
+
+            }
+            $totalDeduct = $totalDeduct + $sumDeduct;
+        }
+        
+
+        $tax = 0;
+
+        if($totalSalary > 10417 || $totalSalary === 16666){
+
+            $tax = $totalSalary * (20/100);
+
+        } else if ($totalSalary > 16666 || $totalSalary === 33332){
+
+            $tax = $totalSalary * (25/100);
+
+        } else if ($totalSalary > 33332 || $totalSalary === 83332) {
+
+
+            $tax = $totalSalary * (30/100);
+
+        } else if ($totalSalary > 83332 || $totalSalary === 333332) {
+
+            $tax = $totalSalary * (32/100);
+
+        } else if ($totalSalary > 333332) {
+
+             $tax = $totalSalary * (35/100);
+
+
+        } else {
+
+            $tax = 0;
+
         }
 
 
@@ -113,8 +151,9 @@ class PayrollController extends Controller
                  'position' => $user->position->name,
                  'overtime_hours' => $overTime,
                  'overtime_salary' => $overSalary,
+                 'tax' => $tax,
                  'double_pay' => $doublepayIsActive === '1' ? $doublepay : null,
-                 'total' =>  $doublepayIsActive === '1' ? $totalSalary + ($doublepay * $salaryRate) : $totalSalary,
+                 'total' =>  $doublepayIsActive === '1' ? (($totalSalary - $totalDeduct) - $tax) + ($doublepay * $salaryRate) : ($totalSalary - $totalDeduct) - $tax,
                  'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
              ]);
          } else {
@@ -130,13 +169,16 @@ class PayrollController extends Controller
 
 
                  $user->payroll()->create([
-                     'total_days' => $workDays->count(),
-                     'hours_work' => $sumWorkHours,
-                     'salary_rate' => $salaryRate,
-                     'position' => $user->position->name,
-                     'double_pay' => $doublepayIsActive === '1' ? $doublepay : $doublepay,
-                     'total' =>  $doublepayIsActive === '1' ? $totalSalary + ($doublepay * $salaryRate) : $totalSalary,
-                     'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
+                    'total_days' => $workDays->count(),
+                    'salary_rate' => $salaryRate,
+                    'hours_work' => $sumWorkHours,
+                    'position' => $user->position->name,
+                    'overtime_hours' => $overTime,
+                    'overtime_salary' => $overSalary,
+                    'tax' => $tax,
+                    'double_pay' => $doublepayIsActive === '1' ? $doublepay : null,
+                    'total' =>  $doublepayIsActive === '1' ? (($totalSalary - $totalDeduct) - $tax) + ($doublepay * $salaryRate) : ($totalSalary - $totalDeduct ) - $tax,
+                    'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
                  ]);
              }
          }
@@ -252,5 +294,17 @@ class PayrollController extends Controller
 
 
         return redirect()->back()->with(['message' => 'Updated Successs']);
+    }
+
+    public function destroy($id){
+
+        $payroll = Payroll::find($id);
+
+
+        $payroll->delete();
+
+
+        return redirect()->route('admin.payroll.index')->with(['message' => 'Denied Payroll']);
+
     }
 }

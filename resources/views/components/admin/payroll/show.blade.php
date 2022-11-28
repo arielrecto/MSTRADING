@@ -1,10 +1,17 @@
 @php
+    
+    $total_salary = $payroll->salary_rate * $payroll->total_days + $payroll->overtime_salary;
     $total = 0;
-
+    
     foreach ($payroll->user->deductionSalary()->get() as $deduction) {
-        $total = $total + $deduction['amount'];
+        $sumDeduct = 0;
+        if ($total_salary > $deduction['range']) {
+            $sumDeduct = $total_salary * ($deduction['amount'] / 100);
+        }
+    
+        $total = $total + $sumDeduct;
     }
-
+    
 @endphp
 
 <x-app-layout>
@@ -74,45 +81,65 @@
                                     <tr>
                                         <td>Total Work Hours: </td>
 
-                                        <td>{{ $payroll->user->position->hours_work }}</td>
+                                        <td>{{ $payroll->hours_work }}hrs</td>
 
                                     </tr>
                                     <!-- row 2 -->
                                     <tr>
                                         <td>Salary Rate</td>
-                                        <td>₱ {{ number_format($payroll->salary_rate,2,'.',',' )}}</td>
+                                        <td>₱ {{ number_format($payroll->salary_rate, 2, '.', ',') }}</td>
 
                                     </tr>
                                     <tr>
                                         <td>Over Time</td>
-                                        <td>{{$payroll->overtime_hours}}</td>
+                                        <td>{{ $payroll->overtime_hours }}hrs</td>
                                     </tr>
                                     <tr>
                                         <td>Over Time Salary</td>
-                                        <td>₱ {{number_format($payroll->overtime_salary, 2, '.', ',')}}</td>
+                                        <td>₱ {{ number_format($payroll->overtime_salary, 2, '.', ',') }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            Rate per Hour
+                                        </td>
+                                        <td>
+                                            ₱ {{number_format($payroll->user->position->salary_rate / $payroll->user->position->hours_work), 2, '.' , ','}}
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td>Double Pay</td>
-                                        <td>{{$payroll->double_pay ?? 'N/A'}}</td>
+                                        <td>{{ $payroll->double_pay ?? 'N/A' }}</td>
                                     </tr>
 
                                     <tr>
 
-                                    @foreach ($payroll->user->deductionSalary()->get() as $deduction)
-                                        <tr>
-                                            <td>{{ $deduction['name'] }}</td>
-                                            <td>₱ {{ number_format($deduction['amount'], 2,'.', ',' )}}</td>
+                                        @foreach ($payroll->user->deductionSalary()->get() as $deduction)
+                                    <tr>
+                                        <td>{{ $deduction['name'] }}</td>
 
-                                        </tr>
+                                        @if ($total_salary > $deduction['range'])
+                                            <td>₱
+                                                {{ number_format($total_salary * ($deduction['amount'] / 100), 2, '.', ',') }}
+                                            </td>
+                                        @else
+                                            <td>₱ {{ number_format(0, 2, '.', ',') }}</td>
+                                        @endif
+                                    </tr>
                                     @endforeach
                                     <tr>
+                                        <td>Tax</td>
+                                        <td>₱ {{ number_format($payroll->tax, 2, '.', ',') }}</td>
+    
+                                    </tr>
+                                    <tr>
                                         <td>Total Deduction</td>
-                                        <td>₱ {{ number_format($total, 2,'.', ',' )}}</td>
+                                        <td>₱ {{ number_format($total + $payroll->tax, 2, '.', ',') }}</td>
 
                                     </tr>
-                                        <td>Total</td>
-                                        <td> ₱ {{ number_format($payroll->total, 2, '.', ',') }}</td>
+                                    <td>Total</td>
+                                    <td> ₱ {{ number_format($payroll->total, 2, '.', ',') }}</td>
 
                                     </tr>
                                 </tbody>
@@ -121,12 +148,22 @@
                     </div>
 
                     <div class="flex flex-row-reverse p-5 mr-10 space-x-5">
-                        <form action="{{route('admin.payroll.approve', ['id' => $payroll->id])}}" method="post">
+                        <div class="px-5">
+                            <form action="{{ route('admin.payroll.approve', ['id' => $payroll->id]) }}" method="post">
 
-                            @csrf
-                            <input type="hidden" name="isApproved" value="true">
-                            <button class="btn btn-success">Approve</button>
-                        </form>
+                                @csrf
+                                <input type="hidden" name="isApproved" value="true">
+                                <button class="btn btn-success">Approve</button>
+                            </form>
+                        </div>
+                        <div>
+                            <form action="{{ route('admin.payroll.delete', ['id' => $payroll->id]) }}" method="post">
+
+                                @csrf
+                                <input type="hidden" name="isApproved" value="true">
+                                <button class="btn btn-error">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 

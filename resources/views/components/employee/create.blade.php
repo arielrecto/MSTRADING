@@ -1,9 +1,7 @@
+@props([
+    'deductions' => [],
+])
 <form method="POST" action="{{ route('dashboard.create') }}" enctype="multipart/form-data">
-
-
-
-
-
     @foreach ($errors->all() as $error)
         <div class="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
             role="alert"> <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor"
@@ -100,11 +98,13 @@
             </label>
             <select name="marital_status" class="select select-info w-full max-w-xs">
                 <option disabled selected>Select Status</option>
-                <option value="merried">Married</option>
+                <option value="married">Married</option>
                 <option value="single">Single</option>
+                <option value="widowed">Widowed</option>
+                <option value="Divorce">Divorce</option>
             </select>
         </div>
-        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0" x-data="{open : false}">
+        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0" x-data="{ open: false }">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
                 Religion
             </label>
@@ -118,13 +118,13 @@
             <h1 class="capitalize" @click="open = ! open"> other</h1>
             <div x-show="open" x-transition.duration.700ms>
                 <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 r
+                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 r
     ounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-city" type="text" name="religion_other" placeholder="">
+                    id="grid-city" type="text" name="religion_other" placeholder="">
             </div>
-            
+
         </div>
-        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0" x-data="{open : false}">
+        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0" x-data="{ open: false }">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
                 Citizenship
             </label>
@@ -133,13 +133,13 @@
                 <option value="Pilipino">Pilipino</option>
             </select>
             <h1 class="capitalize" @click="open = ! open"> other</h1>
-            <div  x-show="open" x-transition.duration.700ms>
+            <div x-show="open" x-transition.duration.700ms>
                 <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 r
+                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 r
     ounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-city" type="text" name="citizenship_other" placeholder="">
+                    id="grid-city" type="text" name="citizenship_other" placeholder="">
             </div>
-           
+
         </div>
     </div>
 
@@ -204,37 +204,44 @@ rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-g
         </div>
 
     </div>
+    @if ($deductions->count() !== 0)
 
-    <div class="py-2">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-            Social Security Number / Goverment Number
-        </label>
-        <input
-            class="appearance-none block w-1/2 bg-gray-200 text-gray-700 border border-gray-200 rounded 
+
+        @if ($deductions->where('name', '=', 'SSS')->first() !== null)
+            <div class="py-2">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                    Social Security Number / Goverment Number
+                </label>
+                <input
+                    class="appearance-none block w-1/2 bg-gray-200 text-gray-700 border border-gray-200 rounded 
     py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-last-name" name="social_num" type="text" placeholder="">
-    </div>
-
-    <div class="py-2">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-            Phil. Health
-        </label>
-        <input
-            class="appearance-none block w-1/2 bg-gray-200 text-gray-700 border border-gray-200 rounded 
+                    id="grid-last-name" name="social_num" type="text" placeholder="">
+            </div>
+        @endif
+        @if ($deductions->where('name', '=', 'Phil Health')->first() !== null)
+            <div class="py-2">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                    Phil. Health
+                </label>
+                <input
+                    class="appearance-none block w-1/2 bg-gray-200 text-gray-700 border border-gray-200 rounded 
     py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-last-name" name="phil_health" type="text" placeholder="">
-    </div>
+                    id="grid-last-name" name="phil_health" type="text" placeholder="">
+            </div>
+        @endif
 
-    <div class="py-2">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-            Pag Ibig
-        </label>
-        <input
-            class="appearance-none block w-1/2 bg-gray-200 text-gray-700 border border-gray-200 rounded 
+        @if ($deductions->where('name', '=', 'Pag Ibig')->first() !== null)
+            <div class="py-2">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                    Pag Ibig
+                </label>
+                <input
+                    class="appearance-none block w-1/2 bg-gray-200 text-gray-700 border border-gray-200 rounded 
     py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-last-name" name="pag_ibig" type="text" placeholder="">
-    </div>
-
+                    id="grid-last-name" name="pag_ibig" type="text" placeholder="">
+            </div>
+        @endif
+    @endif
     <div class="py-2">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
             Tin No.

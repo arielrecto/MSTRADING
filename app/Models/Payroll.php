@@ -20,6 +20,7 @@ class Payroll extends Model
         'overtime_salary',
         'hours_work',          
         'total',
+        'tax',
         'log_date', 
         'is_approved',
         'is_viewed',

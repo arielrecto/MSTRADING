@@ -24,6 +24,7 @@ class Profile extends Model
         'state',
         'zipcode',
         'phil_health',
+        'social_num',
         'pag_ibig',
         'tin_no',
         'cell_no',

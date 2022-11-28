@@ -26,6 +26,7 @@ class DeductionController extends Controller
 
         $deductions = DeductionSalary::create([
             'name' => $request->name,
+            'range' => $request->range,
             'amount' => $request->amount
         ]);
 

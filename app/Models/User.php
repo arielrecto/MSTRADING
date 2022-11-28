@@ -110,6 +110,5 @@ class User extends Authenticatable
     public function adminResponse(){
 
         return $this->hasOne(AdminResponse::class);
-
     }
 }
