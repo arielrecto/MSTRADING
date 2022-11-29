@@ -130,7 +130,7 @@
             </label>
             <select name="citizenship" class="select select-accent w-full max-w-xs">
                 <option disabled selected>Select</option>
-                <option value="Pilipino">Pilipino</option>
+                <option value="Pilipino">Filipino</option>
             </select>
             <h1 class="capitalize" @click="open = ! open"> other</h1>
             <div x-show="open" x-transition.duration.700ms>

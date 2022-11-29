@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Facade\Ignition\DumpRecorder\Dump;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon as SupportCarbon;
 
 class PayrollController extends Controller
 {
@@ -25,16 +26,16 @@ class PayrollController extends Controller
     {
 
 
-    
+
 
         $user = User::find($id);
 
-        if($user->attendances()->count() === 0) {
+        if ($user->attendances()->count() === 0) {
             return back()->with(['message' => 'No Attendance']);
         }
 
 
-        if($user->position()->count() === 0) {
+        if ($user->position()->count() === 0) {
             return back()->with(['message' => 'No Position']);
         }
 
@@ -74,21 +75,18 @@ class PayrollController extends Controller
         //compute overtime salary
         $overSalary = $overTime * $ratePerHour;
 
-        if($doublePayActive === null) {
+        if ($doublePayActive === null) {
 
 
             $doublepayIsActive = false;
-
-
         } else {
 
 
             $doublepayIsActive = $doublePayActive->is_active;
-
         }
 
 
-    
+
         $totalSalary = 0;
         if ($user->deductionSalary()->count() === 0) {
 
@@ -99,76 +97,72 @@ class PayrollController extends Controller
         }
 
         $totalDeduct = 0;
-        foreach ($user->deductionSalary()->get() as $deduction) {
 
-            $sumDeduct = 0;
-            if($totalSalary > $deduction['range']) {
-
-                $sumDeduct = $totalSalary * ($deduction['amount'] / 100);
-
-            }
-            $totalDeduct = $totalDeduct + $sumDeduct;
-        }
+        $today = Carbon::now()->setTimezone('Asia/Manila')->toDateString();
         
+        if ($today === Carbon::parse($today)->endOfMonth()->toDateString()) {
+            foreach ($user->deductionSalary()->get() as $deduction) {
+
+                $sumDeduct = 0;
+                if ($totalSalary > $deduction['range']) {
+
+                    $sumDeduct = $totalSalary * ($deduction['amount'] / 100);
+                }
+                $totalDeduct = $totalDeduct + $sumDeduct;
+            }
+        }
 
         $tax = 0;
 
-        if($totalSalary > 10417 || $totalSalary === 16666){
+        if ($totalSalary > 10417 || $totalSalary === 16666) {
 
-            $tax = $totalSalary * (20/100);
+            $tax = $totalSalary * (20 / 100);
+        } else if ($totalSalary > 16666 || $totalSalary === 33332) {
 
-        } else if ($totalSalary > 16666 || $totalSalary === 33332){
-
-            $tax = $totalSalary * (25/100);
-
+            $tax = $totalSalary * (25 / 100);
         } else if ($totalSalary > 33332 || $totalSalary === 83332) {
 
 
-            $tax = $totalSalary * (30/100);
-
+            $tax = $totalSalary * (30 / 100);
         } else if ($totalSalary > 83332 || $totalSalary === 333332) {
 
-            $tax = $totalSalary * (32/100);
-
+            $tax = $totalSalary * (32 / 100);
         } else if ($totalSalary > 333332) {
 
-             $tax = $totalSalary * (35/100);
-
-
+            $tax = $totalSalary * (35 / 100);
         } else {
 
             $tax = 0;
-
         }
 
 
-         if ($user->payroll()->latest()->first() === null) {
+        if ($user->payroll()->latest()->first() === null) {
 
-             $user->payroll()->create([
-                 'total_days' => $workDays->count(),
-                 'salary_rate' => $salaryRate,
-                 'hours_work' => $sumWorkHours,
-                 'position' => $user->position->name,
-                 'overtime_hours' => $overTime,
-                 'overtime_salary' => $overSalary,
-                 'tax' => $tax,
-                 'double_pay' => $doublepayIsActive === '1' ? $doublepay : null,
-                 'total' =>  $doublepayIsActive === '1' ? (($totalSalary - $totalDeduct) - $tax) + ($doublepay * $salaryRate) : ($totalSalary - $totalDeduct) - $tax,
-                 'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
-             ]);
-         } else {
+            $user->payroll()->create([
+                'total_days' => $workDays->count(),
+                'salary_rate' => $salaryRate,
+                'hours_work' => $sumWorkHours,
+                'position' => $user->position->name,
+                'overtime_hours' => $overTime,
+                'overtime_salary' => $overSalary,
+                'tax' => $tax,
+                'double_pay' => $doublepayIsActive === '1' ? $doublepay : null,
+                'total' =>  $doublepayIsActive === '1' ? (($totalSalary - $totalDeduct) - $tax) + ($doublepay * $salaryRate) : ($totalSalary - $totalDeduct) - $tax,
+                'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
+            ]);
+        } else {
 
-             //chek if already payroll is generated
+            //chek if already payroll is generated
 
-             if ($user->payroll->log_date === Carbon::now()->setTimezone('Asia/Manila')->toDateString()) {
-                 $message = 'Payroll for Today ' . Carbon::now()->setTimezone('Asia/Manila')->toDateString() . " " . Carbon::now()->setTimezone('Asia/Manila')->toTimeString() . ' Already Generated for ' . $user->name;
+            if ($user->payroll->log_date === Carbon::now()->setTimezone('Asia/Manila')->toDateString()) {
+                $message = 'Payroll for Today ' . Carbon::now()->setTimezone('Asia/Manila')->toDateString() . " " . Carbon::now()->setTimezone('Asia/Manila')->toTimeString() . ' Already Generated for ' . $user->name;
 
-                 return redirect()->back()->with(['message' => $message]);
-             } else {
+                return redirect()->back()->with(['message' => $message]);
+            } else {
 
 
 
-                 $user->payroll()->create([
+                $user->payroll()->create([
                     'total_days' => $workDays->count(),
                     'salary_rate' => $salaryRate,
                     'hours_work' => $sumWorkHours,
@@ -177,11 +171,11 @@ class PayrollController extends Controller
                     'overtime_salary' => $overSalary,
                     'tax' => $tax,
                     'double_pay' => $doublepayIsActive === '1' ? $doublepay : null,
-                    'total' =>  $doublepayIsActive === '1' ? (($totalSalary - $totalDeduct) - $tax) + ($doublepay * $salaryRate) : ($totalSalary - $totalDeduct ) - $tax,
+                    'total' =>  $doublepayIsActive === '1' ? (($totalSalary - $totalDeduct) - $tax) + ($doublepay * $salaryRate) : ($totalSalary - $totalDeduct) - $tax,
                     'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
-                 ]);
-             }
-         }
+                ]);
+            }
+        }
 
         return redirect()->back()->with(['message' => 'Salary is payroll is Created!']);
     }
@@ -296,7 +290,8 @@ class PayrollController extends Controller
         return redirect()->back()->with(['message' => 'Updated Successs']);
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
 
         $payroll = Payroll::find($id);
 
@@ -305,6 +300,5 @@ class PayrollController extends Controller
 
 
         return redirect()->route('admin.payroll.index')->with(['message' => 'Denied Payroll']);
-
     }
 }

@@ -1,3 +1,4 @@
+@inject('carbon', 'Carbon\Carbon')
 @php
     
     $total_salary = $payroll->salary_rate * $payroll->total_days + $payroll->overtime_salary;
@@ -12,6 +13,8 @@
         $total = $total + $sumDeduct;
     }
     
+
+    $today = $carbon::now()->toDateString();
 @endphp
 
 <x-app-layout>
@@ -113,6 +116,8 @@
                                         <td>{{ $payroll->double_pay ?? 'N/A' }}</td>
                                     </tr>
 
+
+                                    @if($today === $carbon::parse($today)->endOfMonth()->toDateString());
                                     <tr>
 
                                         @foreach ($payroll->user->deductionSalary()->get() as $deduction)
@@ -128,6 +133,8 @@
                                         @endif
                                     </tr>
                                     @endforeach
+
+                                    @endif
                                     <tr>
                                         <td>Tax</td>
                                         <td>₱ {{ number_format($payroll->tax, 2, '.', ',') }}</td>
