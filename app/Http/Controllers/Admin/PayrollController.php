@@ -99,7 +99,7 @@ class PayrollController extends Controller
         $totalDeduct = 0;
 
         $today = Carbon::now()->setTimezone('Asia/Manila')->toDateString();
-        
+
         if ($today === Carbon::parse($today)->endOfMonth()->toDateString()) {
             foreach ($user->deductionSalary()->get() as $deduction) {
 

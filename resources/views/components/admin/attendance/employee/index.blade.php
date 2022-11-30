@@ -35,44 +35,18 @@
                         </div>
                     @endif
                     <!-- head -->
-
-                    <a href="{{ route('admin.attendance.user') }}"><button class="btn btn-ghost"> View Employee
-                            Attendance</button></a>
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Time In</th>
-                            <th>Time Out</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($attendances as $attendance)
+                        @forelse ($users as $user)
                             <tr>
-                                <th>{{ $attendance->user->name }}</th>
-                                <td>{{ $attendance->time_in }}</td>
-                                <td> {{ $attendance->time_out }} </td>
+                                <th>{{ $user->name }}</th>
                                 <td>
-                                    <div class="flex space-x-5">
-                                        <form
-                                            action="{{ route('admin.attendance.delete', ['id' => $attendance->id]) }}"
-                                            method="POST">
-                                            @csrf
-
-                                            <input type="hidden" name="approve" value="true">
-
-                                            <button class="btn btn-error"><i class="ri-delete-bin-line"></i></button>
-                                        </form>
-                                        <form
-                                            action="{{ route('admin.attendance.approvedAttendance', ['id' => $attendance->id]) }}"
-                                            method="POST">
-                                            @csrf
-
-                                            <input type="hidden" name="approve" value="true">
-
-                                            <button class="btn btn-success"><i class="ri-check-line"></i></button>
-                                        </form>
-                                    </div>
+                                    <a href="{{route('admin.attendance.showUser', ['id' => $user->id])}}"><button class="btn"><i class="ri-eye-line"></i></button></a>
                                 </td>
                             </tr>
                         @empty
@@ -93,38 +67,4 @@
             </div>
         </div>
     </div>
-
-
-    <!-- Put this part before </body> tag -->
-    <input type="checkbox" id="my-modal-3" class="modal-toggle" />
-    <div class="modal p-10">
-        <div class="modal-box relative bg-white">
-            <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-            <form action="{{ route('admin.position.create') }}" method="POST" class="flex flex-col space-y-5">
-                @csrf
-                <h1 class="3xl capitalize">Add Position & Salary</h1>
-                <input type="text" placeholder="Position Name" name="name"
-                    class="input input-bordered input-info w-full" />
-                <input type="text" placeholder="Salary Rate" name="salary_rate"
-                    class="input input-bordered input-info w-full " />
-                <input type="text" placeholder="Hours Work" name="hours_work"
-                    class="input input-bordered input-info w-full " />
-                <input type="text" placeholder="Break Hours" name="break_hours"
-                    class="input input-bordered input-info w-full " />
-                <button class="btn btn-success">Add</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('view', {
-                on: false,
-
-                toggle() {
-                    this.on = !this.on
-                }
-            })
-        })
-    </script>
 </x-app-layout>

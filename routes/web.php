@@ -96,8 +96,11 @@ Route::middleware(['auth'])->group(function () {
             //position routes
             Route::group(['prefix' => 'position', 'as' => 'position.'], function () {
                 Route::get('/show', [PositionController::class, 'show'])->name('show');
+                Route::get('/edit/id={id}', [PositionController::class, 'edit'])->name('edit');
+                Route::post('/update/id={id}', [PositionController::class, 'update'])->name('update');
                 Route::post('/position/create', [PositionController::class, 'create'])->name('create');
                 Route::post('/position/id={id}', [PositionController::class, 'set'])->name('setPosition');
+                Route::post('/delete/id={id}', [PositionController::class, 'destroy'])->name('delete');
             });
 
             //payroll
@@ -124,6 +127,11 @@ Route::middleware(['auth'])->group(function () {
             //attendance
             Route::group(['prefix' => 'attendance', 'as' => 'attendance.'], function () {
                 Route::get('/index', [AttendanceController::class, 'index'])->name('index');
+                Route::get('/users', [AttendanceController::class, 'employeeAttendance'])->name('user');
+                Route::post('/delete/id={id}', [AttendanceController::class, 'destroy'])->name('delete');
+                Route::get('/edit/id={id}', [AttendanceController::class, 'edit'])->name('edit');
+                Route::post('/update/id={id}', [AttendanceController::class, 'update'])->name('update');
+                Route::get('/users/attendance/id={id}', [AttendanceController::class, 'showUserAttendance'])->name('showUser');
                 Route::post('/approvedAttendance/id={id}', [AttendanceController::class, 'approvedAttendance'])->name('approvedAttendance');
             });
 

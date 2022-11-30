@@ -41,7 +41,7 @@
             </x-sidebar-link>
           </li>
           <li>
-            <x-sidebar-link :href="route('admin.attendance.index')" :active="request()->routeIs(['admin.attendance.index'])">
+            <x-sidebar-link :href="route('admin.attendance.index')" :active="request()->routeIs(['admin.attendance.index', 'admin.attendance.approvedAttendance' , 'admin.attendance.showUser' , 'admin.attendance.user', 'admin.attendance.edit'])">
 
                <i class="ri-calendar-check-line text-2xl mr-2"></i>
                {{ __('Employee Attendance') }}

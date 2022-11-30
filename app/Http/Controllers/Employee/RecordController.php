@@ -161,13 +161,13 @@ class RecordController extends Controller
         
             */
 
-            $set_time_in = '8:00:00';
+            // $set_time_in = '8:00:00';
             $user->attendances()->create([
-                'time_in' =>  $set_time_in,
+                'time_in' =>   Carbon::now()->setTimezone('Asia/Manila')->toTimeString(),
                 'log_date' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
             ]);
 
-            return redirect()->back()->with(['message' => 'Time in Sucess']);
+            return redirect()->back()->with(['message' => 'Time in Success']);
         } else {
 
 
@@ -177,9 +177,9 @@ class RecordController extends Controller
 
 
                     //lagyan ng dalawang back slash ang user_time_out taz copy mo yung nasa taas kanina na carbon taz lagay mo
-                    $user_time_out = '19:00:00';
+                    // $user_time_out = '19:00:00';
                     $user->attendances()->latest()->first()->update([
-                        'time_out' =>  $user_time_out // <-- dito
+                        'time_out' =>  Carbon::now()->setTimezone('Asia/Manila')->toTimeString() // <-- dito
                     ]);
 
                     $user_time_in = $user->attendances()->latest()->first()->time_in;
@@ -193,7 +193,7 @@ class RecordController extends Controller
                     }
 
 
-                    //$user_time_out = $user->attendances()->latest()->first()->time_out;
+                    $user_time_out = $user->attendances()->latest()->first()->time_out;
 
 
                     $time_out = explode(':', $user_time_out);
@@ -211,9 +211,14 @@ class RecordController extends Controller
                     $totalHoursWork = (($decTimeforTimeOut - $decTimeforTimeIn) / 60) - $user->position->break_hours;
 
 
+                    $overTime = 0;
 
+                    if($totalHoursWork > $user->position->hours_work){
 
-                    $overTime = ($totalHoursWork - $user->position->hours_work);
+                        $overTime = $totalHoursWork - $user->position->hours_work;
+
+                    }
+                    
 
 
                     $doublePay = DoublePay::where('is_active', '=', '1')->get()->first();
@@ -299,15 +304,15 @@ class RecordController extends Controller
         $payroll = auth::user()->payroll()->where('is_approved', '=', 'true')->latest()->first();
 
 
-         if ($payroll->count() === 0) {
+           if ($payroll === null) {
 
-             return back()->with(['message' => 'No Payroll yet!']);
-         }
+               return back()->with(['message' => 'No Payroll yet!']);
+           }
 
-         $payroll->latest()->first()->update([
-             'is_viewed' => true,
-             'date_viewed' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
-         ]);
-         return view('components.employee.salary.show', compact(['payroll']));
+          $payroll->latest()->first()->update([
+              'is_viewed' => true,
+              'date_viewed' => Carbon::now()->setTimezone('Asia/Manila')->toDateString()
+          ]);
+          return view('components.employee.salary.show', compact(['payroll']));
     }
 }

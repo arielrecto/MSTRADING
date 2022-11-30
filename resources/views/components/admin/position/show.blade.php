@@ -41,6 +41,7 @@
                             <th>Work Hours</th>
                             <th>Break Hours</th>
                             <th>Salary Rate</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,8 +49,23 @@
                             <tr>
                                 <th>{{ $position->name }}</th>
                                 <td> {{ $position->hours_work }}</td>
-                                <td>  {{ $position->break_hours }}</td>
+                                <td> {{ $position->break_hours }}</td>
                                 <td> ₱ {{ $position->salary_rate }}</td>
+                                <td>
+                                    <div class="flex space-x-5">
+                                        <div>
+                                            <a href="{{ route('admin.position.edit', ['id' => $position->id]) }}"><button
+                                                    class="btn btn-success"><i class="ri-pencil-line"></i></button></a>
+                                        </div>
+                                        <div>
+                                            <form action="{{route('admin.position.delete', ['id' => $position->id])}}" method="post">
+                                                @csrf
+                                                <button class="btn btn-error"><i
+                                                        class="ri-delete-bin-line"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         @empty
 
